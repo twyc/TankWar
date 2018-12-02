@@ -106,7 +106,7 @@ public class GameFrame extends Frame implements ActionListener {
 		this.setSize(Fram_width, Fram_length); // 设置界面大小
 		// this.setLocation(280, 50); // 设置界面出现的位置
 		setLocationRelativeTo(null);// 让窗体居中
-		this.setTitle("坦克大战——(重新开始：R键  开火：F键)                 ");
+		this.setTitle("坦克大战——(重新开始：R键  开火：F键 火力全开：A键)                 ");
 
 	}
 
@@ -410,7 +410,7 @@ public class GameFrame extends Frame implements ActionListener {
 			}
 		} else if (e.getActionCommand().equals("help")) {
 			printable = false;
-			JOptionPane.showMessageDialog(null, "用→ ← ↑ ↓控制方向，F键盘发射，R重新开始！", "提示！", JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(null, "用→ ← ↑ ↓控制方向，F键盘发射，A键盘向所有方向发射，R重新开始！", "提示！", JOptionPane.INFORMATION_MESSAGE);
 			this.setVisible(true);
 			printable = true;
 			new Thread(new PaintThread()).start(); // 线程启动

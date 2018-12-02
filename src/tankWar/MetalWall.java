@@ -8,7 +8,7 @@ import java.awt.Toolkit;
  * 金属墙类（钢板,子弹不可打穿）
  */
 public class MetalWall {
-	public static final int width = 30; // 设置金属墙的长宽静态全局参数
+	public static final int width = 20; // 设置金属墙的长宽静态全局参数
 	public static final int length = 30;
 	private int x, y;
 	GameFrame tc;

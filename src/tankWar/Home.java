@@ -64,7 +64,6 @@ public class Home {
 				w.draw(g);
 			}
 		} else {
-			System.out.println(live);
 			gameOver(g); // 调用游戏结束
 		}
 	}

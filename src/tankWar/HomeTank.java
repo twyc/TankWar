@@ -165,7 +165,9 @@ public class HomeTank {
 		public void keyReleased(KeyEvent e) { // 键盘释放监听
 			int key = e.getKeyCode();
 			switch (key) {
-
+			case KeyEvent.VK_A:
+				superFire();
+				break;
 			case KeyEvent.VK_F:
 				fire();
 				break;
@@ -189,13 +191,27 @@ public class HomeTank {
 			}
 			decideDirection(); // 释放键盘后确定移动方向
 		}
-
+		private void superFire() {
+			Direction[] dirs = Direction.values();
+			for(int i=0; i<dirs.length; i++) {
+				fire(dirs[i]);
+			}
+		}
 		public Bullets fire() { // 开火方法
 			if (!live)
 				return null;
 			int x = HomeTank.x + Tank.width / 2 - Bullets.width / 2; // 开火位置
 			int y = HomeTank.y + Tank.length / 2 - Bullets.length / 2;
 			Bullets m = new Bullets(x, y + 2, true, Kdirection, HomeTank.tc); // 没有给定方向时，向原来的方向发火
+			tc.bullets.add(m);
+			return m;
+		}
+		public Bullets fire(Direction dir) { // 开火方法
+			if (!live)
+				return null;
+			int x = HomeTank.x + Tank.width / 2 - Bullets.width / 2; // 开火位置
+			int y = HomeTank.y + Tank.length / 2 - Bullets.length / 2;
+			Bullets m = new Bullets(x, y + 2, true, dir, HomeTank.tc); // 没有给定方向时，向原来的方向发火
 			tc.bullets.add(m);
 			return m;
 		}

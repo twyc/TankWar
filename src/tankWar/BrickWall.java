@@ -5,7 +5,7 @@ import java.awt.*;
  * 砖墙类（子弹可打穿）
  */
 public class BrickWall {
-	public static final int width = 30; // 设置墙的固定参数
+	public static final int width = 20; // 设置墙的固定参数
 	public static final int length = 30;
 	private int x, y;
 	GameFrame tc;
