@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<!-- 等级为1或者2的时候的数量 和 等级为3或者4的时候的数量-->
+	<tankCount>12</tankCount>
+	<tankCount>20</tankCount>
+	
+	<tankSpeed>6</tankSpeed>
+	<tankSpeed>10</tankSpeed>
+	<tankSpeed>14</tankSpeed>
+	<tankSpeed>16</tankSpeed>
+	
+	<bulletSpeed>10</bulletSpeed>
+	<bulletSpeed>12</bulletSpeed>
+	<bulletSpeed>16</bulletSpeed>
+	<bulletSpeed>18</bulletSpeed>
+</config>
