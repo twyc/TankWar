@@ -36,23 +36,14 @@ public class Bullets {
 		bulletImages = new Image[] { // 不同方向的子弹
 		///取资源文件
 				tk.getImage(Bullets.class.getClassLoader().getResource("Images/bulletL.gif")),
-
 				tk.getImage(Bullets.class.getClassLoader().getResource("Images/bulletU.gif")),
-
 				tk.getImage(Bullets.class.getClassLoader().getResource("Images/bulletR.gif")),
-
 				tk.getImage(Bullets.class.getClassLoader().getResource("Images/bulletD.gif")),
-
+				tk.getImage(Bullets.class.getClassLoader().getResource("Images/bulletLU.gif")),
+				tk.getImage(Bullets.class.getClassLoader().getResource("Images/bulletLD.gif")),
+				tk.getImage(Bullets.class.getClassLoader().getResource("Images/bulletRU.gif")),
+				tk.getImage(Bullets.class.getClassLoader().getResource("Images/bulletRD.gif")),
 		};
-
-		imgs.put("L", bulletImages[0]); // 加入Map容器
-
-		imgs.put("U", bulletImages[1]);
-
-		imgs.put("R", bulletImages[2]);
-
-		imgs.put("D", bulletImages[3]);
-
 	}
 
 	public Bullets(int x, int y, Direction dir) { // 构造函数1，传递位置和方向
@@ -74,19 +65,31 @@ public class Bullets {
 		case L:
 			x -= speed; // 子弹不断向左进攻
 			break;
-
 		case U: // 子弹不断向上进攻
 			y -= speed;
 			break;
-
 		case R:
 			x += speed; // 子弹不断向右进攻
 			break;
-
 		case D: // 子弹不断向下进攻
 			y += speed;
 			break;
-
+		case LU:
+			x -= speed; // 子弹不断向左进攻
+			y -= speed;
+			break;
+		case LD:
+			x -= speed; // 子弹不断向左进攻
+			y += speed;
+			break;
+		case RU:
+			x += speed; // 子弹不断向左进攻
+			y -= speed;
+			break;
+		case RD:
+			x += speed; // 子弹不断向左进攻
+			y += speed;
+			break;
 		case STOP: // 游戏暂停
 			break;
 		}
@@ -104,21 +107,29 @@ public class Bullets {
 
 		switch (diretion) { // 选择不同方向的子弹
 		case L:
-			g.drawImage(imgs.get("L"), x, y, null);
+			g.drawImage(bulletImages[0], x, y, null);
 			break;
-
 		case U:
-			g.drawImage(imgs.get("U"), x, y, null);
+			g.drawImage(bulletImages[1], x, y, null);
 			break;
-
 		case R:
-			g.drawImage(imgs.get("R"), x, y, null);
+			g.drawImage(bulletImages[2], x, y, null);
 			break;
-
 		case D:
-			g.drawImage(imgs.get("D"), x, y, null);
+			g.drawImage(bulletImages[3], x, y, null);
 			break;
-
+		case LU:
+			g.drawImage(bulletImages[4], x, y, null);
+			break;
+		case LD:
+			g.drawImage(bulletImages[5], x, y, null);
+			break;
+		case RU:
+			g.drawImage(bulletImages[6], x, y, null);
+			break;
+		case RD:
+			g.drawImage(bulletImages[7], x, y, null);
+			break;
 		}
 
 		move(); // 调用子弹move()函数

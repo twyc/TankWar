@@ -36,12 +36,17 @@ public class HomeTank {
 
 		private static Toolkit tk = Toolkit.getDefaultToolkit();// 控制面板
 		private static Image[] tankImags = null; // 存储全局静态
-		static {//之后如果有空找素材就改这里的图片
-			tankImags = new Image[] { tk.getImage(BombTank.class.getResource("/Images/tankD.gif")),
+		static {
+			tankImags = new Image[] { 
+					tk.getImage(BombTank.class.getResource("/Images/tankD.gif")),
 					tk.getImage(BombTank.class.getResource("/Images/tankU.gif")),
 					tk.getImage(BombTank.class.getResource("/Images/tankL.gif")),
-					tk.getImage(BombTank.class.getResource("/Images/tankR.gif")), };
-
+					tk.getImage(BombTank.class.getResource("/Images/tankR.gif")), 
+					tk.getImage(BombTank.class.getResource("/Images/tankLU.gif")), 
+					tk.getImage(BombTank.class.getResource("/Images/tankLD.gif")), 
+					tk.getImage(BombTank.class.getResource("/Images/tankRU.gif")), 
+					tk.getImage(BombTank.class.getResource("/Images/tankRD.gif")), 
+					};
 		}
 		public void init() {
 			life=200;
@@ -75,8 +80,19 @@ public class HomeTank {
 			case R:
 				g.drawImage(tankImags[3], x, y, null);
 				break;
+			case LU:
+				g.drawImage(tankImags[4], x, y, null);
+				break;
+			case LD:
+				g.drawImage(tankImags[5], x, y, null);
+				break;
+			case RU:
+				g.drawImage(tankImags[6], x, y, null);
+				break;
+			case RD:
+				g.drawImage(tankImags[7], x, y, null);
+				break;
 			default:
-				System.out.println("80");
 				break;
 			}
 
@@ -101,7 +117,7 @@ public class HomeTank {
 			case D:
 				y += speed;
 				break;
-			case STOP:
+			default:
 				break;
 			}
 
@@ -128,18 +144,22 @@ public class HomeTank {
 		void decideDirection() {
 			if (!bL && !bU && bR && !bD) // 向右移动
 				direction = Direction.R;
-
 			else if (bL && !bU && !bR && !bD) // 向左移
 				direction = Direction.L;
-
 			else if (!bL && bU && !bR && !bD) // 向上移动
 				direction = Direction.U;
-
 			else if (!bL && !bU && !bR && bD) // 向下移动
 				direction = Direction.D;
-
 			else if (!bL && !bU && !bR && !bD)
 				direction = Direction.STOP; // 没有按键，就保持不动
+			else if (bL && !bU && !bR && bD) // 左下移动
+				direction = Direction.LD;
+			else if (bL && bU && !bR && !bD) // 左上移动
+				direction = Direction.LU;
+			else if (!bL && !bU && bR && bD) // 右下移动
+				direction = Direction.RD;
+			else if (!bL && bU && bR && !bD) // 右上移动
+				direction = Direction.RU;
 		}
 
 		public void keyReleased(KeyEvent e) { // 键盘释放监听

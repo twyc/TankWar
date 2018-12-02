@@ -417,24 +417,28 @@ public class GameFrame extends Frame implements ActionListener {
 		} else if (e.getActionCommand().equals("level1")) {//用配置文件读取不同等级下的属性
 			Tank.count = tankInfo.getTankCount(1);
 			Tank.speed = tankInfo.getTankSpeed(1);
+			homeTank.speed = Tank.speed;
 			Bullets.speed = tankInfo.getBulletSpeed(1);
 			this.dispose();
 			new GameFrame();
 		} else if (e.getActionCommand().equals("level2")) {
 			Tank.count = tankInfo.getTankCount(2);
 			Tank.speed = tankInfo.getTankSpeed(2);
+			homeTank.speed = Tank.speed;
 			Bullets.speed = tankInfo.getBulletSpeed(2);
 			this.dispose();
 			new GameFrame();
 		} else if (e.getActionCommand().equals("level3")) {
 			Tank.count = tankInfo.getTankCount(3);
 			Tank.speed = tankInfo.getTankSpeed(3);
+			homeTank.speed = Tank.speed;
 			Bullets.speed = tankInfo.getBulletSpeed(3);
 			this.dispose();
 			new GameFrame();
 		} else if (e.getActionCommand().equals("level4")) {
 			Tank.count = tankInfo.getTankCount(4);
 			Tank.speed = tankInfo.getTankSpeed(4);
+			homeTank.speed = Tank.speed;
 			Bullets.speed = tankInfo.getBulletSpeed(4);
 			this.dispose();
 			new GameFrame();
