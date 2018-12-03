@@ -24,12 +24,15 @@ public class Blood {
 			{ 258, 413 } };
 
 	public void draw(Graphics g) {
-		if (r.nextInt(100) > 98) {
+		if (r.nextInt(100) > 99) {
 			this.live = true;
 			move();
 		}
 		if (!live)
 			return;
+		if(r.nextInt(100)<50) {//²»ÈÃÑª°üÍ£µÄÌ«¾Ã
+			return;
+		}
 		g.drawImage(bloodImags[0], x, y, null);
 
 	}

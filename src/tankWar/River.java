@@ -11,7 +11,7 @@ import java.awt.Toolkit;
  * 因此不使用单例模式
  */
 public class River {
-	public static final int riverWidth = 45;
+	public static final int riverWidth = 50;
 	public static final int riverLength = 150;// 静态全局变量
 	private int x, y;
 	GameFrame tc;

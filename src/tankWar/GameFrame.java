@@ -204,6 +204,7 @@ public class GameFrame extends Frame implements ActionListener {
 
 	// 每颗子弹
 	public void everyBullet(Graphics g) {
+		boolean flag = false;//待会用来检测普通墙是不是被打掉了 然后来决定子弹要不要删了
 		for (int i = 0; i < bullets.size(); i++) { // 对每一个子弹
 			Bullets m = bullets.get(i);
 			m.hitTanks(tanks); // 每一个子弹打到坦克上
@@ -217,12 +218,17 @@ public class GameFrame extends Frame implements ActionListener {
 
 			for (int j = 0; j < otherWall.size(); j++) {// 每一个子弹打到其他墙上
 				BrickWall w = otherWall.get(j);
-				m.hitWall(w);
+				flag |= m.hitWall(w);
 			}
-
+			if( flag ) {
+				m.setLive(false);
+			}
 			for (int j = 0; j < homeWall.size(); j++) {// 每一个子弹打到家的墙上
 				BrickWall cw = homeWall.get(j);
-				m.hitWall(cw);
+				flag |= m.hitWall(cw);
+			}
+			if( flag ) {
+				m.setLive(false);
 			}
 			m.draw(g); // 画出效果图
 		}
@@ -284,6 +290,7 @@ public class GameFrame extends Frame implements ActionListener {
 			Font f = g.getFont();
 			g.setFont(new Font("TimesRoman", Font.BOLD, 60));
 			this.otherWall.clear();
+			Home.setFlag(true);
 			g.drawString("你赢了！ ", 310, 300);
 			g.setFont(f);
 		}

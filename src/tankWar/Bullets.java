@@ -138,7 +138,9 @@ public class Bullets {
 	public boolean isLive() { // 是否还活着
 		return live;
 	}
-
+	public void setLive(boolean state) {
+		live = state;
+	}
 	public Rectangle getRect() {
 		return new Rectangle(x, y, width, length);
 	}
@@ -182,7 +184,6 @@ public class Bullets {
 
 	public boolean hitWall(BrickWall w) { // 子弹打到CommonWall上
 		if (this.live && this.getRect().intersects(w.getRect())) {
-			this.live = false;
 			this.tc.otherWall.remove(w); // 子弹打到CommonWall墙上时则移除此击中墙
 			this.tc.homeWall.remove(w);
 			return true;
@@ -193,7 +194,6 @@ public class Bullets {
 	public boolean hitWall(MetalWall w) { // 子弹打到金属墙上
 		if (this.live && this.getRect().intersects(w.getRect())) {
 			this.live = false;
-			// this.tc.metalWall.remove(w); //子弹不能穿越金属墙
 			return true;
 		}
 		return false;
@@ -202,7 +202,7 @@ public class Bullets {
 	public boolean hitHome() { // 当子弹打到大本营时
 		if (this.live && this.getRect().intersects(tc.home.getRect())) {
 			this.live = false;
-			this.tc.home.setLive(false); // 当大本营接受一枪时就毁灭
+			this.tc.home.setLive(false|Home.isFlag()); // 当大本营接受一枪时就毁灭
 			return true;
 		}
 		return false;

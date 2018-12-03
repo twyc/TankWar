@@ -232,6 +232,7 @@ public class HomeTank {
 			int key = e.getKeyCode();
 			switch (key) {
 			case KeyEvent.VK_R: // 当按下R时，重新开始游戏
+				Home.setFlag(false);
 				tc.tanks.clear(); // 清理
 				tc.bullets.clear();
 				tc.trees.clear();

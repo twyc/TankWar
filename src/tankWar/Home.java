@@ -18,15 +18,22 @@ public class Home {
 	private static GameFrame tc;
 	public static final int width = 30, length = 30; // 全局静态变量长宽
 	private boolean live = true;
-
+	private static boolean flag = false;//判断游戏是否已经结束 防止胜利后再出现失败的情况
+	
 	private static Toolkit tk = Toolkit.getDefaultToolkit(); // 全局静态变量
 	private static Image[] homeImags = null;
 	static {
 		homeImags = new Image[] { tk.getImage(BrickWall.class.getResource("/Images/home.jpg")), };
 	}
 	private final static Home instance = new Home();
-	private Home(GameFrame tc) {// 构造函数，传递Home的参数并赋值
+	private Home(GameFrame tc) {// 构造函数，传递Home的参数并赋
 		Home.tc = tc; // 获得控制
+	}
+	public static boolean isFlag() {
+		return flag;
+	}
+	public static void setFlag(boolean flag) {
+		Home.flag = flag;
 	}
 	private Home() {
 	}
@@ -36,7 +43,6 @@ public class Home {
 	}
 	
 	public void gameOver(Graphics g) {
-
 		tc.tanks.clear();// 作清理页面工作
 		tc.metalWall.clear();
 		tc.otherWall.clear();
@@ -68,7 +74,7 @@ public class Home {
 		}
 	}
 	public boolean isLive() { // 判读是否还活着
-		return live;
+		return live|flag;
 	}
 
 	public void setLive(boolean live) { // 设置生命
