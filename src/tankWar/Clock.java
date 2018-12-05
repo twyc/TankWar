@@ -3,22 +3,25 @@ import java.awt.*;
 import java.util.Random;
 
 /**
- * 血包类（医疗箱，可加血）
+ * 秒表类（暂停道具）
  */
 
-public class Blood extends Prop{
+public class Clock extends Prop{
 
-	public Blood(GameFrame tc) {
+	public Clock(GameFrame tc) {
 		super(tc);
 		// TODO Auto-generated constructor stub
 	}
 
-	private Image[] bloodImags = new Image[] { 
-			tk.getImage(Blood.class.getResource("/Images/hp.png")), };
-	
+	private Image[] clockImags = new Image[] { 
+			tk.getImage(Clock.class.getResource("/Images/clock.png")), };
+	public static void main(String[] args) {
+        System.out.println(Clock.class.getResource(""));
+        System.out.println(Clock.class.getResource("/"));
+	}
 	public void draw(Graphics g) {
 		if (r.nextInt(100) > 98) {
-			if(r.nextInt(100)<20) {//不让血包停的太久
+			if(r.nextInt(100)<20) {//不让停的太久
 				return;
 			}
 			this.live = true;
@@ -26,15 +29,11 @@ public class Blood extends Prop{
 		}
 		if (!live)
 			return;
-		g.drawImage(bloodImags[0], x, y, null);
-
+		g.drawImage(clockImags[0], x, y, null);
 	}
 
 	public void fun() {
-		if (HomeTank.getLife() <= 100)
-			HomeTank.setLife(HomeTank.getLife()+100);// 每吃一个，增加100生命点
-		else
-			HomeTank.setLife(200);
+		Tank.pause = 1000;
 	}
 	public Rectangle getRect() {
 		return new Rectangle(x, y, width, length);

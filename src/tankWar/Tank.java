@@ -9,6 +9,7 @@ import java.util.*;
  */
 
 public class Tank {
+	public static int pause = 0;
 	public static int speed = 6; // 静态全局变量速度
 	public static int count = 0;
 	public static final int width = 35, length = 35; // 坦克的全局大小，具有不可改变性
@@ -16,11 +17,9 @@ public class Tank {
 	private Direction Kdirection = Direction.U; // 初始化方向为向上
 	GameFrame tc;
 
-	private boolean good;
 	private int x, y;
 	private int oldX, oldY;
 	private boolean live = true; // 初始化为活着
-	private int life = 200; // 初始生命值
 
 	private static Random r = new Random();
 	private int step = r.nextInt(10) + 5; // 产生一个随机数,随机模拟坦克的移动路径
@@ -42,30 +41,20 @@ public class Tank {
 				};
 	}
 
-	public Tank(int x, int y, boolean good) {// Tank的构造函数1
+	public Tank(int x, int y,Direction dir, GameFrame tc) {// Tank的构造函数
 		this.x = x;
 		this.y = y;
 		this.oldX = x;
 		this.oldY = y;
-		this.good = good;
-	}
-
-	public Tank(int x, int y, boolean good, Direction dir, GameFrame tc) {// Tank的构造函数2
-		this(x, y, good);
 		this.direction = dir;
 		this.tc = tc;
 	}
 
 	public void draw(Graphics g) {
 		if (!live) {
-			if (!good) {
-				tc.tanks.remove(this); // 删除无效的
-			}
+			tc.tanks.remove(this); // 删除无效的
 			return;
 		}
-
-		if (good)
-			new DrawBloodbBar().draw(g); // 玩家坦克的血量条
 
 		switch (Kdirection) {
 		// 根据方向选择坦克的图片
@@ -101,7 +90,10 @@ public class Tank {
 	}
 
 	void move() {
-
+		if( pause > 0) {
+			pause--;
+			return;
+		}
 		this.oldX = x;
 		this.oldY = y;
 
@@ -135,7 +127,6 @@ public class Tank {
 		if (y + Tank.length > GameFrame.Fram_length)
 			y = GameFrame.Fram_length - Tank.length;
 
-		if (!good) {
 			Direction[] directons = Direction.values();
 			if (step == 0) {
 				step = r.nextInt(12) + 3; // 产生随机路径
@@ -146,7 +137,6 @@ public class Tank {
 
 			if (r.nextInt(40) > 38)// 产生随机数，控制敌人开火
 				this.fire();
-		}
 	}
 
 	protected void changToOldDir() {
@@ -154,54 +144,14 @@ public class Tank {
 		y = oldY;
 	}
 
-	void decideDirection() {
-		if (!bL && !bU && bR && !bD) // 向右移动
-			direction = Direction.R;
-		else if (bL && !bU && !bR && !bD) // 向左移
-			direction = Direction.L;
-		else if (!bL && bU && !bR && !bD) // 向上移动
-			direction = Direction.U;
-		else if (!bL && !bU && !bR && bD) // 向下移动
-			direction = Direction.D;
-		else if (!bL && !bU && !bR && !bD)
-			direction = Direction.STOP; // 没有按键，就保持不动
-		else if (bL && !bU && !bR && bD) // 左下移动
-			direction = Direction.LD;
-		else if (bL && bU && !bR && !bD) // 左上移动
-			direction = Direction.LU;
-		else if (!bL && !bU && bR && bD) // 右下移动
-			direction = Direction.RD;
-		else if (!bL && bU && bR && !bD) // 右上移动
-			direction = Direction.RU;
-	}
 
-	public void keyReleased(KeyEvent e) { // 键盘释放监听
-		//为了决定方向 这里从switch改成if
-		int key = e.getKeyCode();
-		if(key == KeyEvent.VK_F) {
-			fire();
-		}
-		if(key == KeyEvent.VK_RIGHT) {
-			bR = false;
-		}
-		if(key == KeyEvent.VK_LEFT) {
-			bL = false;
-		}
-		if(key == KeyEvent.VK_UP) {
-			bU = false;
-		}
-		if(key == KeyEvent.VK_DOWN) {
-			bD = false;
-		}
-		decideDirection(); // 释放键盘后确定移动方向
-	}
 
 	public Bullets fire() { // 开火方法
 		if (!live)
 			return null;
 		int x = this.x + Tank.width / 2 - Bullets.width / 2; // 开火位置
 		int y = this.y + Tank.length / 2 - Bullets.length / 2;
-		Bullets m = new Bullets(x, y + 2, good, Kdirection, this.tc); // 没有给定方向时，向原来的方向发火
+		Bullets m = new Bullets(x, y + 2, false, Kdirection, this.tc); // 没有给定方向时，向原来的方向发火
 		tc.bullets.add(m);
 		return m;
 	}
@@ -218,9 +168,6 @@ public class Tank {
 		this.live = live;
 	}
 
-	public boolean isGood() {
-		return good;
-	}
 
 	public boolean collideWithWall(BrickWall w) { // 碰撞到普通墙时
 		if (this.live && this.getRect().intersects(w.getRect())) {
@@ -264,37 +211,6 @@ public class Tank {
 					return true;
 				}
 			}
-		}
-		return false;
-	}
-
-	public int getLife() {
-		return life;
-	}
-
-	public void setLife(int life) {
-		this.life = life;
-	}
-
-	private class DrawBloodbBar {
-		public void draw(Graphics g) {
-			Color c = g.getColor();
-			g.setColor(Color.RED);
-			g.drawRect(375, 585, width, 10);// 显示玩家坦克的血量条
-			int w = width * life / 200;
-			g.fillRect(375, 585, w, 10);// 显示玩家坦克的血量条
-			g.setColor(c);
-		}
-	}
-
-	public boolean eat(Blood b) {
-		if (this.live && b.isLive() && this.getRect().intersects(b.getRect())) {
-			if (this.life <= 100)
-				this.life = this.life + 100; // 每吃一个，增加100生命点
-			else
-				this.life = 200;
-			b.setLive(false);
-			return true;
 		}
 		return false;
 	}

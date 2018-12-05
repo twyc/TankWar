@@ -243,11 +243,11 @@ public class HomeTank {
 				if (tc.tanks.size() == 0) { // 当在区域中没有坦克时，就出来坦克
 					for (int i = 0; i < 20; i++) {
 						if (i < 9) // 设置坦克出现的位置
-							tc.tanks.add(new Tank(150 + 70 * i, 40, false, Direction.R, tc));
+							tc.tanks.add(new Tank(150 + 70 * i, 40, Direction.R, tc));
 						else if (i < 15)
-							tc.tanks.add(new Tank(700, 140 + 50 * (i - 6), false, Direction.D, tc));
+							tc.tanks.add(new Tank(700, 140 + 50 * (i - 6),Direction.D, tc));
 						else
-							tc.tanks.add(new Tank(10, 50 * (i - 12), false, Direction.L, tc));
+							tc.tanks.add(new Tank(10, 50 * (i - 12), Direction.L, tc));
 					}
 				}
 				instance.init();
@@ -318,11 +318,11 @@ public class HomeTank {
 			return false;
 		}
 
-		public int getLife() {
+		public static int getLife() {
 			return life;
 		}
 
-		public void setLife(int life) {
+		public static void setLife(int life) {
 			HomeTank.life = life;
 		}
 
@@ -337,12 +337,9 @@ public class HomeTank {
 			}
 		}
 
-		public boolean eat(Blood b) {
+		public boolean eat(Prop b) {
 			if (HomeTank.live && b.isLive() && HomeTank.getRect().intersects(b.getRect())) {
-				if (HomeTank.life <= 100)
-					HomeTank.life = HomeTank.life + 100; // 每吃一个，增加100生命点
-				else
-					HomeTank.life = 200;
+				b.fun();
 				b.setLive(false);
 				return true;
 			}

@@ -6,6 +6,7 @@ import java.awt.event.*;
 import java.util.List;
 import javax.swing.JOptionPane;
 
+
 /**
  * 坦克大战的主类
  */
@@ -24,10 +25,9 @@ public class GameFrame extends Frame implements ActionListener {
 	Image screenImage = null;
 
 	HomeTank homeTank = HomeTank.getInstance(this);// 实例化坦克
-	Blood blood = new Blood(); // 实例化血包
-
 	Home home = Home.getInstance(this);// 实例化home
-
+	
+	List<Prop> props = new ArrayList<Prop>();
 	List<River> theRiver = new ArrayList<River>();
 	List<Tank> tanks = new ArrayList<Tank>();
 	List<BombTank> bombTanks = new ArrayList<BombTank>();
@@ -104,7 +104,7 @@ public class GameFrame extends Frame implements ActionListener {
 		this.setMenuBar(jmb);// 菜单Bar放到JFrame上
 		this.setVisible(true);
 		this.setSize(Fram_width, Fram_length); // 设置界面大小
-		// this.setLocation(280, 50); // 设置界面出现的位置
+		this.setLocation(280, 50); // 设置界面出现的位置
 		setLocationRelativeTo(null);// 让窗体居中
 		this.setTitle("坦克大战——(重新开始：R键  开火：F键 火力全开：A键)                 ");
 
@@ -113,6 +113,9 @@ public class GameFrame extends Frame implements ActionListener {
 	// 初始化对象容器
 	public void initContainer() {
 		home.setLive(true);//否则每次重新开始都会直接显示结束页面
+		props.add(new Blood(this));
+		props.add(new Clock(this));
+		props.add(new Landmine(this));
 		for (int i = 0; i < 10; i++) { // 家的格局
 			if (i < 4)
 				homeWall.add(new BrickWall(350, 580 - 21 * i, this));
@@ -158,11 +161,11 @@ public class GameFrame extends Frame implements ActionListener {
 
 		for (int i = 0; i < 20; i++) { // 初始化20辆坦克
 			if (i < 9) // 设置坦克出现的位置
-				tanks.add(new Tank(150 + 70 * i, 40, false, Direction.D, this));
+				tanks.add(new Tank(150 + 70 * i, 40, Direction.D, this));
 			else if (i < 15)
-				tanks.add(new Tank(700, 140 + 50 * (i - 6), false, Direction.D, this));
+				tanks.add(new Tank(700, 140 + 50 * (i - 6), Direction.D, this));
 			else
-				tanks.add(new Tank(10, 50 * (i - 12), false, Direction.D, this));
+				tanks.add(new Tank(10, 50 * (i - 12), Direction.D, this));
 		}
 	}
 
@@ -186,7 +189,10 @@ public class GameFrame extends Frame implements ActionListener {
 	public void staticPaint(Graphics g) {
 		home.draw(g); // 画出home
 		homeTank.draw(g); // 画出自己家的坦克
-		homeTank.eat(blood);// 加血--生命值
+		for(Prop prop : props) {
+			homeTank.eat(prop);
+		}
+		System.out.println("size="+bombTanks.size());
 		for (int i = 0; i < bombTanks.size(); i++) { // 画出爆炸效果
 			BombTank bt = bombTanks.get(i);
 			bt.draw(g);
@@ -199,7 +205,9 @@ public class GameFrame extends Frame implements ActionListener {
 			MetalWall mw = metalWall.get(i);
 			mw.draw(g);
 		}
-		blood.draw(g);// 画出加血包
+		for(Prop prop : props) {
+			prop.draw(g);
+		}
 	}
 
 	// 每颗子弹
