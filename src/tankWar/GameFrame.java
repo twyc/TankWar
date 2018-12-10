@@ -15,8 +15,8 @@ public class GameFrame extends Frame implements ActionListener {
 
 	private static final long serialVersionUID = 5972735870004738773L;
 
-	public static final int Fram_width = 800; // 静态全局窗口大小
-	public static final int Fram_length = 600;
+	public static final int Fram_width = Info.getInstance().getFramWidth(); // 静态全局窗口大小
+	public static final int Fram_length = Info.getInstance().getFramLength();
 	public static boolean printable = true; // 记录暂停状态，此时线程不刷新界面
 	MenuBar jmb = null;
 	Menu jm1 = null, jm2 = null, jm3 = null, jm4 = null;
@@ -24,16 +24,16 @@ public class GameFrame extends Frame implements ActionListener {
 			jmi9 = null;
 	Image screenImage = null;
 
-	HomeTank homeTank = HomeTank.getInstance(this);// 实例化坦克
+	HomeTank homeTank = new HomeTank(300, 560, Direction.STOP, this);// 实例化坦克
 	Home home = Home.getInstance(this);// 实例化home
 	
 	List<Prop> props = new ArrayList<Prop>();
 	List<River> theRiver = new ArrayList<River>();
-	List<Tank> tanks = new ArrayList<Tank>();
+	List<AutoTank> tanks = new ArrayList<AutoTank>();
 	List<BombTank> bombTanks = new ArrayList<BombTank>();
 	List<Bullets> bullets = new ArrayList<Bullets>();
 	List<Tree> trees = new ArrayList<Tree>();
-	List<BrickWall> homeWall = new ArrayList<BrickWall>();
+	List<Wall> homeWall = new ArrayList<Wall>();
 	List<BrickWall> otherWall = new ArrayList<BrickWall>();
 	List<MetalWall> metalWall = new ArrayList<MetalWall>();
 
@@ -116,37 +116,33 @@ public class GameFrame extends Frame implements ActionListener {
 		props.add(new Blood(this));
 		props.add(new Clock(this));
 		props.add(new Landmine(this));
-		for (int i = 0; i < 10; i++) { // 家的格局
-			if (i < 4)
-				homeWall.add(new BrickWall(350, 580 - 21 * i, this));
-			else if (i < 7)
-				homeWall.add(new BrickWall(372 + 22 * (i - 4), 517, this));
+		props.add(new Enhance(this));
+		for (int i = 0; i < 8; i++) { // 家的格局
+			if (i < 3)
+				homeWall.add(new BrickWall(338, 580 - 35 * i, this));
+			else if (i < 5)
+				homeWall.add(new BrickWall(372 + 35 * (i - 3), 510, this));
 			else
-				homeWall.add(new BrickWall(416, 538 + (i - 7) * 21, this));
+				homeWall.add(new BrickWall(412, 538 + (i - 5) * 35, this));
 		}
 
-		for (int i = 0; i < 32; i++) { // 砖墙
-			if (i < 16) {
-				otherWall.add(new BrickWall(220 + 20 * i, 300, this)); // 砖墙布局
-				otherWall.add(new BrickWall(500 + 20 * i, 180, this));
-				otherWall.add(new BrickWall(200, 400 + 20 * i, this));
-				otherWall.add(new BrickWall(500, 400 + 20 * i, this));
-			} else if (i < 32) {
-				otherWall.add(new BrickWall(220 + 20 * (i - 16), 320, this));
-				otherWall.add(new BrickWall(500 + 20 * (i - 16), 220, this));
-				otherWall.add(new BrickWall(220, 400 + 20 * (i - 16), this));
-				otherWall.add(new BrickWall(520, 400 + 20 * (i - 16), this));
-			}
+		for (int i = 0; i < 16; i++) { // 砖墙
+			otherWall.add(new BrickWall(220 + 35 * i, 300, this)); // 砖墙布局
+			otherWall.add(new BrickWall(500 + 35 * i, 180, this));
+			otherWall.add(new BrickWall(200, 400 + 35 * i, this));
+			otherWall.add(new BrickWall(500, 400 + 35 * i, this));
 		}
 
-		for (int i = 0; i < 20; i++) { // 金属墙布局
+
+		for (int i = 0; i < 10; i++) { // 金属墙布局
 			if (i < 10) {
-				metalWall.add(new MetalWall(140 + 30 * i, 150, this));
-				metalWall.add(new MetalWall(600, 400 + 20 * (i), this));
-			} else if (i < 20)
-				metalWall.add(new MetalWall(140 + 30 * (i - 10), 180, this));
+				metalWall.add(new MetalWall(140 + 35 * i, 150, this));
+				metalWall.add(new MetalWall(600, 400 + 35 * (i), this));
+			} 
+			else if (i < 20)
+				metalWall.add(new MetalWall(140 + 35 * (i - 10), 180, this));
 			else
-				metalWall.add(new MetalWall(500 + 30 * (i - 10), 160, this));
+				metalWall.add(new MetalWall(500 + 35 * (i - 10), 160, this));
 		}
 
 		for (int i = 0; i < 4; i++) { // 树的布局
@@ -161,11 +157,11 @@ public class GameFrame extends Frame implements ActionListener {
 
 		for (int i = 0; i < 20; i++) { // 初始化20辆坦克
 			if (i < 9) // 设置坦克出现的位置
-				tanks.add(new Tank(150 + 70 * i, 40, Direction.D, this));
+				tanks.add(new AutoTank(150 + 70 * i, 40, Direction.D, this));
 			else if (i < 15)
-				tanks.add(new Tank(700, 140 + 50 * (i - 6), Direction.D, this));
+				tanks.add(new AutoTank(700, 140 + 50 * (i - 6), Direction.D, this));
 			else
-				tanks.add(new Tank(10, 50 * (i - 12), Direction.D, this));
+				tanks.add(new AutoTank(10, 50 * (i - 12), Direction.D, this));
 		}
 	}
 
@@ -189,10 +185,18 @@ public class GameFrame extends Frame implements ActionListener {
 	public void staticPaint(Graphics g) {
 		home.draw(g); // 画出home
 		homeTank.draw(g); // 画出自己家的坦克
-		for(Prop prop : props) {
+		for(Prop prop : props) {//吃道具
 			homeTank.eat(prop);
 		}
-		System.out.println("size="+bombTanks.size());
+		//调用媒体跟踪器（MediaTracker）加载图像，确保图像完全加载完毕后再进行显示
+		MediaTracker tracker = new MediaTracker(this);
+		for (Image i : BombTank.imgs) { // 画出爆炸效果
+			tracker.addImage(i, 0);
+		}
+		try {
+			tracker.waitForAll();
+		} catch (InterruptedException ex) {
+		}
 		for (int i = 0; i < bombTanks.size(); i++) { // 画出爆炸效果
 			BombTank bt = bombTanks.get(i);
 			bt.draw(g);
@@ -205,6 +209,16 @@ public class GameFrame extends Frame implements ActionListener {
 			MetalWall mw = metalWall.get(i);
 			mw.draw(g);
 		}
+		for (int i = 0; i < homeWall.size(); i++) { // 画出metalWall
+			Wall mw = homeWall.get(i);
+			if(Enhance.time > 0) {
+				mw.draw(g);
+				Enhance.time--;
+			}else if(Enhance.flag) {
+				Enhance.refun(this);
+				mw.draw(g);
+			}
+		}
 		for(Prop prop : props) {
 			prop.draw(g);
 		}
@@ -216,7 +230,7 @@ public class GameFrame extends Frame implements ActionListener {
 		for (int i = 0; i < bullets.size(); i++) { // 对每一个子弹
 			Bullets m = bullets.get(i);
 			m.hitTanks(tanks); // 每一个子弹打到坦克上
-			m.hitTank(homeTank); // 每一个子弹打到自己家的坦克上时
+			m.hithomeTank(homeTank); // 每一个子弹打到自己家的坦克上时
 			m.hitHome(); // 每一个子弹打到家里时
 
 			for (int j = 0; j < metalWall.size(); j++) { // 每一个子弹打到金属墙上
@@ -232,7 +246,7 @@ public class GameFrame extends Frame implements ActionListener {
 				m.setLive(false);
 			}
 			for (int j = 0; j < homeWall.size(); j++) {// 每一个子弹打到家的墙上
-				BrickWall cw = homeWall.get(j);
+				Wall cw = homeWall.get(j);
 				flag |= m.hitWall(cw);
 			}
 			if( flag ) {
@@ -249,7 +263,7 @@ public class GameFrame extends Frame implements ActionListener {
 			Tank t = tanks.get(i); // 获得键值对的键
 
 			for (int j = 0; j < homeWall.size(); j++) {
-				BrickWall cw = homeWall.get(j);
+				Wall cw = homeWall.get(j);
 				t.collideWithWall(cw); // 每一个坦克撞到家里的墙时
 				cw.draw(g);
 			}
@@ -330,7 +344,7 @@ public class GameFrame extends Frame implements ActionListener {
 			cw.draw(g);
 		}
 		for (int i = 0; i < homeWall.size(); i++) { // 家里的坦克撞到自己家
-			BrickWall w = homeWall.get(i);
+			Wall w = homeWall.get(i);
 			homeTank.collideWithWall(w);
 			w.draw(g);
 		}
@@ -388,7 +402,7 @@ public class GameFrame extends Frame implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		TankInfo tankInfo = new TankInfo();
+		Info info = Info.getInstance();
 		if (e.getActionCommand().equals("NewGame")) {
 			printable = false;
 			Object[] options = { "确定", "取消" };
@@ -430,31 +444,27 @@ public class GameFrame extends Frame implements ActionListener {
 			printable = true;
 			new Thread(new PaintThread()).start(); // 线程启动
 		} else if (e.getActionCommand().equals("level1")) {//用配置文件读取不同等级下的属性
-			Tank.count = tankInfo.getTankCount(1);
-			Tank.speed = tankInfo.getTankSpeed(1);
-			homeTank.speed = Tank.speed;
-			Bullets.speed = tankInfo.getBulletSpeed(1);
+			AutoTank.count = info.getTankCount(1);
+			Tank.speed = info.getTankSpeed(1);
+			Bullets.speed = info.getBulletSpeed(1);
 			this.dispose();
 			new GameFrame();
 		} else if (e.getActionCommand().equals("level2")) {
-			Tank.count = tankInfo.getTankCount(2);
-			Tank.speed = tankInfo.getTankSpeed(2);
-			homeTank.speed = Tank.speed;
-			Bullets.speed = tankInfo.getBulletSpeed(2);
+			AutoTank.count = info.getTankCount(2);
+			Tank.speed = info.getTankSpeed(2);
+			Bullets.speed = info.getBulletSpeed(2);
 			this.dispose();
 			new GameFrame();
 		} else if (e.getActionCommand().equals("level3")) {
-			Tank.count = tankInfo.getTankCount(3);
-			Tank.speed = tankInfo.getTankSpeed(3);
-			homeTank.speed = Tank.speed;
-			Bullets.speed = tankInfo.getBulletSpeed(3);
+			AutoTank.count = info.getTankCount(3);
+			Tank.speed = info.getTankSpeed(3);
+			Bullets.speed = info.getBulletSpeed(3);
 			this.dispose();
 			new GameFrame();
 		} else if (e.getActionCommand().equals("level4")) {
-			Tank.count = tankInfo.getTankCount(4);
-			Tank.speed = tankInfo.getTankSpeed(4);
-			homeTank.speed = Tank.speed;
-			Bullets.speed = tankInfo.getBulletSpeed(4);
+			AutoTank.count = info.getTankCount(4);
+			Tank.speed = info.getTankSpeed(4);
+			Bullets.speed = info.getBulletSpeed(4);
 			this.dispose();
 			new GameFrame();
 		}

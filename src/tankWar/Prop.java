@@ -1,7 +1,6 @@
 package tankWar;
 
 import java.awt.Graphics;
-import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.util.Random;
@@ -12,8 +11,8 @@ import java.util.Random;
  */
 public class Prop {
 
-	public final int width = 34;
-	public final int length = 30;
+	public final int width = Info.getInstance().getPropWidth();
+	public final int length = Info.getInstance().getPropLength();
 
 	protected int x, y;
 	GameFrame tc;
@@ -33,20 +32,40 @@ public class Prop {
 		return;
 	}
 	protected void move() {
-		x = r.nextInt(GameFrame.Fram_length - width);
-		y = r.nextInt(GameFrame.Fram_width - length);
+		 do{
+			x = r.nextInt(GameFrame.Fram_length);
+			y = r.nextInt(GameFrame.Fram_width);
+		}while (!isOk(x,y));
 	}
-	public static void main(String[] args) {
-		for(int i=72;i>-72;i--) {
-			for(int j=72;j>-72;j--) {
-				for(int k=72;k>-72;k--) {
-					if(i+j+k==27&&i*j*k==72) {
-						System.out.println("i="+i+"j="+j+"k="+k);
-					}
-				}
+	private boolean isOk(int x, int y) {//判断这个位置是不是会和其他东西碰撞
+		if(x-width<0||y-length<0||x+width>tc.Fram_width||y+width>tc.Fram_length) {
+			return false;
+		}
+		for (int j = 0; j < tc.homeWall.size(); j++) {
+			Wall cw = tc.homeWall.get(j);
+			if(cw.getRect().intersects(getRect())) {
+				return false;
 			}
 		}
-		System.out.println("end");
+		for (int j = 0; j < tc.otherWall.size(); j++) { // 每一个坦克撞到家以外的墙
+			BrickWall cw = tc.otherWall.get(j);
+			if(cw.getRect().intersects(getRect())) {
+				return false;
+			}
+		}
+		for (int j = 0; j < tc.metalWall.size(); j++) { // 每一个坦克撞到金属墙
+			MetalWall cw = tc.metalWall.get(j);
+			if(cw.getRect().intersects(getRect())) {
+				return false;
+			}
+		}
+		for (int j = 0; j < tc.theRiver.size(); j++) {
+			River cw = tc.theRiver.get(j); // 每一个坦克撞到河流时
+			if(cw.getRect().intersects(getRect())) {
+				return false;
+			}
+		}
+		return !Home.getInstance(tc).getRect().intersects(getRect());
 	}
 	public Rectangle getRect() {
 		return new Rectangle(x, y, width, length);

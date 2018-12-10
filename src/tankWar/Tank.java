@@ -1,61 +1,50 @@
 package tankWar;
 
 import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
+import java.util.List;
 
 /**
  * 坦克类（适用敌方坦克和玩家坦克）
+ * 父类
  */
 
 public class Tank {
-	public static int pause = 0;
-	public static int speed = 6; // 静态全局变量速度
-	public static int count = 0;
-	public static final int width = 35, length = 35; // 坦克的全局大小，具有不可改变性
-	private Direction direction = Direction.STOP; // 初始化状态为静止
-	private Direction Kdirection = Direction.U; // 初始化方向为向上
+	public static int speed = Info.getInstance().getTankSpeed(1); // 静态全局变量速度
+	public static final int width = Info.getInstance().getTankWidth(), length = Info.getInstance().getTankLength(); // 坦克的全局大小，具有不可改变性
+	protected Direction direction = Direction.STOP; // 初始化状态为静止
+	protected Direction Kdirection = Direction.U; // 初始化方向为向上
 	GameFrame tc;
 
-	private int x, y;
-	private int oldX, oldY;
-	private boolean live = true; // 初始化为活着
-
-	private static Random r = new Random();
-	private int step = r.nextInt(10) + 5; // 产生一个随机数,随机模拟坦克的移动路径
-
-	private boolean bL = false, bU = false, bR = false, bD = false;
-
-	private static Toolkit tk = Toolkit.getDefaultToolkit();// 控制面板
-	private static Image[] tankImags = null; // 存储全局静态
+	protected int x, y;
+	protected int oldX, oldY;
+	protected boolean live = true; // 初始化为活着
+	protected boolean good;
+	protected static Toolkit tk = Toolkit.getDefaultToolkit();// 控制面板
+	protected static Image[] tankImags = null; // 存储全局静态
 	static {
 		tankImags = new Image[] { 
-				tk.getImage(BombTank.class.getResource("/Images/tankD.gif")),
-				tk.getImage(BombTank.class.getResource("/Images/tankU.gif")),
-				tk.getImage(BombTank.class.getResource("/Images/tankL.gif")),
-				tk.getImage(BombTank.class.getResource("/Images/tankR.gif")), 
-				tk.getImage(BombTank.class.getResource("/Images/tankLU.gif")), 
-				tk.getImage(BombTank.class.getResource("/Images/tankLD.gif")), 
-				tk.getImage(BombTank.class.getResource("/Images/tankRU.gif")), 
-				tk.getImage(BombTank.class.getResource("/Images/tankRD.gif")), 
-				};
+			tk.getImage(BombTank.class.getResource("/Images/tankD.gif")),
+			tk.getImage(BombTank.class.getResource("/Images/tankU.gif")),
+			tk.getImage(BombTank.class.getResource("/Images/tankL.gif")),
+			tk.getImage(BombTank.class.getResource("/Images/tankR.gif")), 
+			tk.getImage(BombTank.class.getResource("/Images/tankLU.gif")), 
+			tk.getImage(BombTank.class.getResource("/Images/tankLD.gif")), 
+			tk.getImage(BombTank.class.getResource("/Images/tankRU.gif")), 
+			tk.getImage(BombTank.class.getResource("/Images/tankRD.gif")), 
+			};
 	}
 
-	public Tank(int x, int y,Direction dir, GameFrame tc) {// Tank的构造函数
+	public Tank(int x, int y,Direction dir, GameFrame tc,boolean good) {// Tank的构造函数
 		this.x = x;
 		this.y = y;
 		this.oldX = x;
 		this.oldY = y;
 		this.direction = dir;
 		this.tc = tc;
+		this.good = good;
 	}
 
 	public void draw(Graphics g) {
-		if (!live) {
-			tc.tanks.remove(this); // 删除无效的
-			return;
-		}
-
 		switch (Kdirection) {
 		// 根据方向选择坦克的图片
 		case D:
@@ -90,12 +79,8 @@ public class Tank {
 	}
 
 	void move() {
-		if( pause > 0) {
-			pause--;
-			return;
-		}
-		this.oldX = x;
-		this.oldY = y;
+		oldX = x;
+		oldY = y;
 
 		switch (direction) { // 选择移动方向
 		case L:
@@ -126,17 +111,7 @@ public class Tank {
 			x = GameFrame.Fram_width - Tank.width;
 		if (y + Tank.length > GameFrame.Fram_length)
 			y = GameFrame.Fram_length - Tank.length;
-
-			Direction[] directons = Direction.values();
-			if (step == 0) {
-				step = r.nextInt(12) + 3; // 产生随机路径
-				int rn = r.nextInt(directons.length);
-				direction = directons[rn]; // 产生随机方向
-			}
-			step--;
-
-			if (r.nextInt(40) > 38)// 产生随机数，控制敌人开火
-				this.fire();
+		
 	}
 
 	protected void changToOldDir() {
@@ -147,11 +122,12 @@ public class Tank {
 
 
 	public Bullets fire() { // 开火方法
-		if (!live)
+		if (!live) {
 			return null;
+		}
 		int x = this.x + Tank.width / 2 - Bullets.width / 2; // 开火位置
 		int y = this.y + Tank.length / 2 - Bullets.length / 2;
-		Bullets m = new Bullets(x, y + 2, false, Kdirection, this.tc); // 没有给定方向时，向原来的方向发火
+		Bullets m = new Bullets(x, y + 2, good, Kdirection, this.tc); // 没有给定方向时，向原来的方向发火
 		tc.bullets.add(m);
 		return m;
 	}
@@ -169,17 +145,9 @@ public class Tank {
 	}
 
 
-	public boolean collideWithWall(BrickWall w) { // 碰撞到普通墙时
-		if (this.live && this.getRect().intersects(w.getRect())) {
+	public boolean collideWithWall(Wall cw) { // 碰撞到普通墙时
+		if (this.live && this.getRect().intersects(cw.getRect())) {
 			this.changToOldDir(); // 转换到原来的方向上去
-			return true;
-		}
-		return false;
-	}
-
-	public boolean collideWithWall(MetalWall w) { // 撞到金属墙
-		if (this.live && this.getRect().intersects(w.getRect())) {
-			this.changToOldDir();
 			return true;
 		}
 		return false;
@@ -201,11 +169,12 @@ public class Tank {
 		return false;
 	}
 
-	public boolean collideWithTanks(java.util.List<Tank> tanks) {// 撞到坦克时
+	public boolean collideWithTanks(List<AutoTank> tanks) {// 撞到坦克时
 		for (int i = 0; i < tanks.size(); i++) {
 			Tank t = tanks.get(i);
 			if (this != t) {
 				if (this.live && t.isLive() && this.getRect().intersects(t.getRect())) {
+					System.out.println("here");
 					this.changToOldDir();
 					t.changToOldDir();
 					return true;

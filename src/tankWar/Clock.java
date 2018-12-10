@@ -1,6 +1,5 @@
 package tankWar;
 import java.awt.*;
-import java.util.Random;
 
 /**
  * 秒表类（暂停道具）
@@ -15,10 +14,6 @@ public class Clock extends Prop{
 
 	private Image[] clockImags = new Image[] { 
 			tk.getImage(Clock.class.getResource("/Images/clock.png")), };
-	public static void main(String[] args) {
-        System.out.println(Clock.class.getResource(""));
-        System.out.println(Clock.class.getResource("/"));
-	}
 	public void draw(Graphics g) {
 		if (r.nextInt(100) > 98) {
 			if(r.nextInt(100)<20) {//不让停的太久
@@ -33,7 +28,7 @@ public class Clock extends Prop{
 	}
 
 	public void fun() {
-		Tank.pause = 1000;
+		AutoTank.pause = Info.getInstance().getPauseTime();
 	}
 	public Rectangle getRect() {
 		return new Rectangle(x, y, width, length);

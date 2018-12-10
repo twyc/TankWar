@@ -14,4 +14,20 @@
 	<bulletSpeed>16</bulletSpeed>
 	<bulletSpeed>18</bulletSpeed>
 	
+	<tankLength>35</tankLength>
+	<tankWidth>35</tankWidth>
+	
+	<wallLength>35</wallLength>
+	<wallWidth>35</wallWidth>
+	
+	<propWidth>34</propWidth>
+	<propLength>30</propLength>
+	
+	<bulletWidth>10</bulletWidth>
+	<bulletLength>10</bulletLength>
+	
+	<FramWidth>800</FramWidth>
+	<FramLength>600</FramLength>
+	
+	<pauseTime>1000</pauseTime>
 </config>

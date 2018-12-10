@@ -31,10 +31,10 @@ public class Blood extends Prop{
 	}
 
 	public void fun() {
-		if (HomeTank.getLife() <= 100)
-			HomeTank.setLife(HomeTank.getLife()+100);// 每吃一个，增加100生命点
+		if (tc.homeTank.getLife() <= 100)
+			tc.homeTank.setLife(tc.homeTank.getLife()+100);// 每吃一个，增加100生命点
 		else
-			HomeTank.setLife(200);
+			tc.homeTank.setLife(200);
 	}
 	public Rectangle getRect() {
 		return new Rectangle(x, y, width, length);

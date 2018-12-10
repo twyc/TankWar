@@ -12,7 +12,7 @@ public class BombTank {
 	private GameFrame tc;
 	private static Toolkit tk = Toolkit.getDefaultToolkit();
 
-	private static Image[] imgs = { // 存储爆炸图片（从小到大的爆炸效果图）
+	public static Image[] imgs = { // 存储爆炸图片（从小到大的爆炸效果图）
 			tk.getImage(BombTank.class.getClassLoader().getResource("Images/1.gif")),
 			tk.getImage(BombTank.class.getClassLoader().getResource("Images/2.gif")),
 			tk.getImage(BombTank.class.getClassLoader().getResource("Images/3.gif")),

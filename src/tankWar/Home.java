@@ -16,7 +16,7 @@ public class Home {
 	private static final int x = 373;
 	private static final int y = 545;
 	private static GameFrame tc;
-	public static final int width = 30, length = 30; // 全局静态变量长宽
+	public static final int width = 43, length = 43; // 全局静态变量长宽
 	private boolean live = true;
 	private static boolean flag = false;//判断游戏是否已经结束 防止胜利后再出现失败的情况
 	
@@ -26,7 +26,7 @@ public class Home {
 		homeImags = new Image[] { tk.getImage(BrickWall.class.getResource("/Images/home.jpg")), };
 	}
 	private final static Home instance = new Home();
-	private Home(GameFrame tc) {// 构造函数，传递Home的参数并赋
+	private Home(GameFrame tc) {// 私有构造函数，传递Home的参数并赋
 		Home.tc = tc; // 获得控制
 	}
 	public static boolean isFlag() {
@@ -37,6 +37,7 @@ public class Home {
 	}
 	private Home() {
 	}
+	//谁要给谁
 	public static Home getInstance(GameFrame tc) {
 		Home.tc = tc;
 		return instance;
@@ -46,11 +47,12 @@ public class Home {
 		tc.tanks.clear();// 作清理页面工作
 		tc.metalWall.clear();
 		tc.otherWall.clear();
+		tc.homeWall.clear();
 		tc.bombTanks.clear();
 		tc.theRiver.clear();
 		tc.trees.clear();
 		tc.bullets.clear();
-		tc.homeTank.setLive(false);
+		tc.props.clear();
 		Color c = g.getColor(); // 设置参数
 		g.setColor(Color.green);
 		Font f = g.getFont();
@@ -65,10 +67,6 @@ public class Home {
 	public void draw(Graphics g) {
 		if (live) { // 如果活着，则画出home
 			g.drawImage(homeImags[0], x, y, null);
-			for (int i = 0; i < tc.homeWall.size(); i++) {
-				BrickWall w = tc.homeWall.get(i);
-				w.draw(g);
-			}
 		} else {
 			gameOver(g); // 调用游戏结束
 		}
