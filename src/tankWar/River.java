@@ -10,7 +10,7 @@ import java.awt.Toolkit;
  * 但是在以后使用其他地图时很有可能再次创建实例 
  * 因此不使用单例模式
  */
-public class River {
+public class River implements StillObject{
 	public static final int riverWidth = 50;
 	public static final int riverLength = 150;// 静态全局变量
 	private int x, y;
@@ -59,6 +59,12 @@ public class River {
 
 	public Rectangle getRect() {
 		return new Rectangle(x, y, riverWidth, riverLength);
+	}
+
+	@Override
+	public boolean hit(Bullets b) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

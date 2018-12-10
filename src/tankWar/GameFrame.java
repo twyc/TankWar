@@ -26,6 +26,10 @@ public class GameFrame extends Frame implements ActionListener {
 
 	HomeTank homeTank = new HomeTank(300, 560, Direction.STOP, this);// 实例化坦克
 	Home home = Home.getInstance(this);// 实例化home
+	TSResultNo tsResultNo = new TSResultNo();//坦克和静止物体之间撞到没反应的策略
+	TSResultYes tsResultYes = new TSResultYes();//坦克和静止物体之间撞到没反应的策略
+	TBResult tbResult = new TBResult();//坦克和子弹之间撞到的策略
+	TTResult ttResult = new TTResult();//坦克之间相互碰撞的策略
 	
 	List<Prop> props = new ArrayList<Prop>();
 	List<River> theRiver = new ArrayList<River>();
@@ -229,8 +233,10 @@ public class GameFrame extends Frame implements ActionListener {
 		boolean flag = false;//待会用来检测普通墙是不是被打掉了 然后来决定子弹要不要删了
 		for (int i = 0; i < bullets.size(); i++) { // 对每一个子弹
 			Bullets m = bullets.get(i);
-			m.hitTanks(tanks); // 每一个子弹打到坦克上
-			m.hithomeTank(homeTank); // 每一个子弹打到自己家的坦克上时
+			tbResult.collide(homeTank, m);// 每一个子弹打到自己家的坦克上时
+			for (Tank tank : tanks) {
+				tbResult.collide(tank, m);// 每一个子弹打到电脑坦克上时
+			}
 			m.hitHome(); // 每一个子弹打到家里时
 
 			for (int j = 0; j < metalWall.size(); j++) { // 每一个子弹打到金属墙上
@@ -264,27 +270,32 @@ public class GameFrame extends Frame implements ActionListener {
 
 			for (int j = 0; j < homeWall.size(); j++) {
 				Wall cw = homeWall.get(j);
-				t.collideWithWall(cw); // 每一个坦克撞到家里的墙时
+				tsResultYes.collide(t, cw); // 每一个坦克撞到家里的墙时
 				cw.draw(g);
 			}
 			for (int j = 0; j < otherWall.size(); j++) { // 每一个坦克撞到家以外的墙
 				BrickWall cw = otherWall.get(j);
-				t.collideWithWall(cw);
+				tsResultYes.collide(t, cw);
 				cw.draw(g);
 			}
 			for (int j = 0; j < metalWall.size(); j++) { // 每一个坦克撞到金属墙
 				MetalWall mw = metalWall.get(j);
-				t.collideWithWall(mw);
+				tsResultYes.collide(t, mw);
 				mw.draw(g);
 			}
 
 			for (int j = 0; j < theRiver.size(); j++) {
 				River r = theRiver.get(j); // 每一个坦克撞到河流时
-				t.collideRiver(r);
+				tsResultYes.collide(t, r);
 				r.draw(g);
 			}
-			t.collideWithTanks(tanks); // 撞到自己的人
-			t.collideHome(home);
+			ttResult.collide(t, homeTank); // 撞到其他坦克
+			for(Tank tank:tanks) {
+				if(tank != t) {
+					ttResult.collide(t, tank);
+				}
+			}
+			tsResultYes.collide(t, home);
 			t.draw(g);
 		}
 		for (int i = 0; i < trees.size(); i++) { // 画出trees
@@ -293,7 +304,7 @@ public class GameFrame extends Frame implements ActionListener {
 		}
 	}
 
-	// 文字显示和是否结束的判断
+	// 文字显示和是否结束的判断 以及游戏进程的进行
 	public void framPaint(Graphics g) {
 		Color c = g.getColor();
 		g.setColor(Color.green); // 设置字体显示属性
@@ -330,31 +341,33 @@ public class GameFrame extends Frame implements ActionListener {
 		staticPaint(g);
 		everyBullet(g);
 		everyTank(g);
-		// 玩家坦克
-		homeTank.collideWithTanks(tanks);
-		homeTank.collideHome(home);
+		hometank(g);
+	}
+
+	public void hometank(Graphics g) {
+		tsResultYes.collide(homeTank, home);
 		for (int i = 0; i < metalWall.size(); i++) {// 撞到金属墙
 			MetalWall w = metalWall.get(i);
-			homeTank.collideWithWall(w);
+			tsResultYes.collide(homeTank, w);
 			w.draw(g);
 		}
 		for (int i = 0; i < otherWall.size(); i++) {
 			BrickWall cw = otherWall.get(i);
-			homeTank.collideWithWall(cw);
+			tsResultYes.collide(homeTank, cw);
 			cw.draw(g);
 		}
 		for (int i = 0; i < homeWall.size(); i++) { // 家里的坦克撞到自己家
 			Wall w = homeWall.get(i);
-			homeTank.collideWithWall(w);
+			tsResultYes.collide(homeTank, w);
 			w.draw(g);
 		}
 		for (int i = 0; i < theRiver.size(); i++) {
 			River r = theRiver.get(i); // 撞到河流时
-			homeTank.collideRiver(r);
+			tsResultYes.collide(homeTank, r);
+			System.out.println("here");
 			r.draw(g);
 		}
 	}
-
 	public GameFrame() {
 		initContainer();
 		initPage();

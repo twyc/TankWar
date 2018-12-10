@@ -1,13 +1,16 @@
 package tankWar;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Rectangle;
 import java.awt.Toolkit;
 
 /**
  * 树（丛林）类
+ * 仍然让它实现接口的目的还是OCP
+ * 这次的说法是以后万一有能烧树的功能呢= =
  */
 
-public class Tree {
+public class Tree implements StillObject{
 	public static final int width = 30;
 	public static final int length = 30;
 	private int x, y;
@@ -26,6 +29,16 @@ public class Tree {
 
 	public void draw(Graphics g) { // 画出树
 		g.drawImage(treeImags[0], x, y, null);
+	}
+
+	@Override
+	public Rectangle getRect() {
+		return null;
+	}
+
+	@Override
+	public boolean hit(Bullets b) {
+		return false;
 	}
 
 }

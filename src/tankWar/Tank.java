@@ -119,7 +119,8 @@ public class Tank {
 		y = oldY;
 	}
 
-
+	public void hit() {//被击中之后的动作
+	}
 
 	public Bullets fire() { // 开火方法
 		if (!live) {
@@ -144,45 +145,7 @@ public class Tank {
 		this.live = live;
 	}
 
-
-	public boolean collideWithWall(Wall cw) { // 碰撞到普通墙时
-		if (this.live && this.getRect().intersects(cw.getRect())) {
-			this.changToOldDir(); // 转换到原来的方向上去
-			return true;
-		}
-		return false;
-	}
-
-	public boolean collideRiver(River r) { // 撞到河流的时候
-		if (this.live && this.getRect().intersects(r.getRect())) {
-			this.changToOldDir();
-			return true;
-		}
-		return false;
-	}
-
-	public boolean collideHome(Home h) { // 撞到家的时候
-		if (this.live && this.getRect().intersects(h.getRect())) {
-			this.changToOldDir();
-			return true;
-		}
-		return false;
-	}
-
-	public boolean collideWithTanks(List<AutoTank> tanks) {// 撞到坦克时
-		for (int i = 0; i < tanks.size(); i++) {
-			Tank t = tanks.get(i);
-			if (this != t) {
-				if (this.live && t.isLive() && this.getRect().intersects(t.getRect())) {
-					System.out.println("here");
-					this.changToOldDir();
-					t.changToOldDir();
-					return true;
-				}
-			}
-		}
-		return false;
-	}
+//运用了策略模式 所以去掉了碰撞检测方法
 
 	public int getX() {
 		return x;

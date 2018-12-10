@@ -4,7 +4,7 @@ import java.awt.*;
 /**
  * 砖墙类（子弹可打穿）
  */
-public class Wall {
+public class Wall implements StillObject{
 	public static final int width = Info.getInstance().getWallWidth(); // 设置墙的固定参数
 	public static final int length = Info.getInstance().getWallLength();
 	protected int x, y;
@@ -24,4 +24,15 @@ public class Wall {
 	public Rectangle getRect() { // 构造指定参数的长方形实例
 		return new Rectangle(x, y, width, length);
 	}
+
+	@Override
+	public boolean hit(Bullets b) {
+		if (b.isLive() && getRect().intersects(b.getRect())) {
+			b.setLive(false);
+			return true;//通过返回值保证打到了 具体的处理还是放在GameFrame里面通过对容器的操作来完成
+		}
+		return false;
+	}
+
+
 }

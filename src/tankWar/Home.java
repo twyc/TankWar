@@ -12,7 +12,7 @@ import java.awt.Toolkit;
  * 在坦克大战游戏中 一定只有一个home 那么可以使用单例模式防止被多次创建
  */
 
-public class Home {
+public class Home implements StillObject{
 	private static final int x = 373;
 	private static final int y = 545;
 	private static GameFrame tc;
@@ -82,5 +82,12 @@ public class Home {
 	public Rectangle getRect() { // 返回长方形实例
 		return new Rectangle(x, y, width, length);
 	}
-
+	@Override
+	public boolean hit(Bullets b) {
+		if (b.isLive() && getRect().intersects(b.getRect())) {
+			b.setLive(false);
+			return true;//通过返回值保证打到了 具体的处理还是放在GameFrame里面通过对容器的操作来完成
+		}
+		return false;
+	}
 }

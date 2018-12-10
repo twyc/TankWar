@@ -18,6 +18,14 @@ public class Bullets {
 	Direction diretion;///枚举类型的方向
 
 	private boolean good;
+	public boolean isGood() {
+		return good;
+	}
+
+	public void setGood(boolean good) {
+		this.good = good;
+	}
+
 	private boolean live = true;///是否存在
 
 	private GameFrame tc;
@@ -133,38 +141,6 @@ public class Bullets {
 	}
 	public Rectangle getRect() {
 		return new Rectangle(x, y, width, length);
-	}
-
-	public boolean hitTanks(List<AutoTank> tanks) {// 当子弹打到坦克时
-		for (int i = 0; i < tanks.size(); i++) {
-			if (hitTank(tanks.get(i))) { // 对每一辆坦克，调用hitTank
-				return true;
-			}
-		}
-		return false;
-	}
-	public boolean hitTank(Tank t) { // 当子弹打到坦克上
-		if (this.live && this.getRect().intersects(t.getRect()) && t.isLive() && this.good != false) {
-			BombTank e = new BombTank(t.getX(), t.getY(), tc);
-			tc.bombTanks.add(e);
-			t.setLive(false);
-			this.live = false;
-			return true; // 射击成功，返回true
-		}
-		return false; // 否则返回false
-	}
-	
-	public boolean hithomeTank(HomeTank homeTank) { // 当子弹打到玩家坦克上
-		if (this.live && this.getRect().intersects(homeTank.getRect()) && homeTank.isLive() && this.good != true) {
-			BombTank e = new BombTank(homeTank.getX(), homeTank.getY(), tc);
-			tc.bombTanks.add(e);
-			homeTank.setLife(homeTank.getLife() - 50); // 中一颗子弹寿命减少50，中4枪就死，总生命值200
-			if (homeTank.getLife() <= 0)
-				homeTank.setLive(false); // 当寿命为0时，设置寿命为死亡状态
-			this.live = false;
-			return true; // 射击成功，返回true
-		}
-		return false; // 否则返回false
 	}
 
 	public boolean hitWall(Wall cw) { // 子弹打到CommonWall上

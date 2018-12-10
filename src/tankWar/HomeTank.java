@@ -24,6 +24,12 @@ public class HomeTank extends Tank{
 		
 		KeyTest kTest = new KeyTest();
 		
+		public void hit() {//被击中之后的反应
+			life-=50;
+			if(life==0) {
+				live=false;
+			}
+		}
 		protected void keyReleased(KeyEvent e) {
 			kTest.keyReleased(e, this);
 		}
