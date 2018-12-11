@@ -38,8 +38,15 @@ public class Prop {
 		}while (!isOk(x,y));
 	}
 	private boolean isOk(int x, int y) {//判断这个位置是不是会和其他东西碰撞
-		if(x-width<0||y-length<0||x+width>tc.Fram_width||y+width>tc.Fram_length) {
+		if(x-width<0||y-length<0||x+width>GameFrame.Fram_width||y+width>GameFrame.Fram_length) {
 			return false;
+		}
+		for(Prop prop : tc.props) {//道具之间不要重叠
+			if(prop!=this) {
+				if(prop.getRect().intersects(getRect())) {
+					return false;
+				}
+			}
 		}
 		for (int j = 0; j < tc.homeWall.size(); j++) {
 			Wall cw = tc.homeWall.get(j);

@@ -11,8 +11,8 @@ import java.awt.Toolkit;
  * 因此不使用单例模式
  */
 public class River implements StillObject{
-	public static final int riverWidth = 50;
-	public static final int riverLength = 150;// 静态全局变量
+	public static final int riverWidth = Info.getInstance().getriverWidth();
+	public static final int riverLength = Info.getInstance().getriverLength();// 静态全局变量
 	private int x, y;
 	GameFrame tc;
 

@@ -1,10 +1,9 @@
 package tankWar;
 
 import java.awt.*;
-import java.util.List;
 
 /**
- * 坦克类（适用敌方坦克和玩家坦克）
+ * 坦克类
  * 父类
  */
 
@@ -119,7 +118,8 @@ public class Tank {
 		y = oldY;
 	}
 
-	public void hit() {//被击中之后的动作
+	public void hit() {//被击中之后的动作 主要动作都在子类里面完成 这里只写共性
+		tc.bombTanks.add(new BombTank(x, y, tc));
 	}
 
 	public Bullets fire() { // 开火方法

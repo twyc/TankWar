@@ -2,9 +2,9 @@ package tankWar;
 
 /*
  * StrategyTB的实现
- * 实现的策略是中弹直接死
+ * 实现的策略是没生命值的坦克碰撞的时候消失
  */
-public class TBResult implements StrategyTB{
+public class TBResultNoLife implements StrategyTB{
 
 	@Override
 	public boolean collide(Tank t, Bullets b) {
@@ -13,8 +13,7 @@ public class TBResult implements StrategyTB{
 		}
 		if (t.isLive() && b.isLive() && t.getRect().intersects(b.getRect())) {
 			b.setLive(false);
-			t.hit();//被击中之后的反应扔tank类里面去处理 
-			//在这一组关系里面要处理的核心其实应该就是被击中之后的反应 我这样好像不合适 但是如果不这样代码逻辑写出来又会乱成一坨或者还要添加新类
+			t.setLive(false);
 			return true;
 		}
 		return false;

@@ -1,7 +1,6 @@
 package tankWar;
 
 import java.awt.*;
-import java.util.List;
 
 /**
  * ×Óµ¯Àà

@@ -1,7 +1,9 @@
 package tankWar;
 
 import java.awt.event.KeyEvent;
-
+/*
+ * 把监听释放和监听按下的方法提取出来 维护GameFrame里面的代码可读性
+ */
 public class KeyTest {
 	public void keyReleased(KeyEvent e,HomeTank tank) { // 键盘释放监听
 		int key = e.getKeyCode();

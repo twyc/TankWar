@@ -3,6 +3,7 @@ import java.awt.*;
 
 /**
  * 砖墙类（子弹可打穿）
+ * 继承自Wall类
  */
 public class BrickWall extends Wall{
 	public BrickWall(int x, int y, GameFrame tc) {

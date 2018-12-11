@@ -28,7 +28,8 @@ public class GameFrame extends Frame implements ActionListener {
 	Home home = Home.getInstance(this);// 实例化home
 	TSResultNo tsResultNo = new TSResultNo();//坦克和静止物体之间撞到没反应的策略
 	TSResultYes tsResultYes = new TSResultYes();//坦克和静止物体之间撞到没反应的策略
-	TBResult tbResult = new TBResult();//坦克和子弹之间撞到的策略
+	TBResultLife tbResultLife = new TBResultLife();//有血条的坦克和子弹之间撞到的策略
+	TBResultNoLife tbResultNoLife = new TBResultNoLife();//有血条的坦克和子弹之间撞到的策略
 	TTResult ttResult = new TTResult();//坦克之间相互碰撞的策略
 	
 	List<Prop> props = new ArrayList<Prop>();
@@ -233,9 +234,9 @@ public class GameFrame extends Frame implements ActionListener {
 		boolean flag = false;//待会用来检测普通墙是不是被打掉了 然后来决定子弹要不要删了
 		for (int i = 0; i < bullets.size(); i++) { // 对每一个子弹
 			Bullets m = bullets.get(i);
-			tbResult.collide(homeTank, m);// 每一个子弹打到自己家的坦克上时
+			tbResultLife.collide(homeTank, m);// 每一个子弹打到自己家的坦克上时
 			for (Tank tank : tanks) {
-				tbResult.collide(tank, m);// 每一个子弹打到电脑坦克上时
+				tbResultNoLife.collide(tank, m);// 每一个子弹打到电脑坦克上时
 			}
 			m.hitHome(); // 每一个子弹打到家里时
 

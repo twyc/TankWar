@@ -33,6 +33,41 @@ public class Info {
 		 return Integer.parseInt(count[0]);
 	}
 	
+	
+	public int gettreeWidth() {
+		 String count[] = xmlUtil.getByNames("treeWidth");
+		 return Integer.parseInt(count[0]);
+	}
+	public int gettreeLength() {
+		 String count[] = xmlUtil.getByNames("treeLength");
+		 return Integer.parseInt(count[0]);
+	}
+	
+	public int getriverWidth() {
+		 String count[] = xmlUtil.getByNames("riverWidth");
+		 return Integer.parseInt(count[0]);
+	}
+	public int getriverLength() {
+		 String count[] = xmlUtil.getByNames("riverLength");
+		 return Integer.parseInt(count[0]);
+	}
+	public int gethomeX() {
+		 String count[] = xmlUtil.getByNames("homeX");
+		 return Integer.parseInt(count[0]);
+	}
+	public int gethomeY() {
+		 String count[] = xmlUtil.getByNames("homeY");
+		 return Integer.parseInt(count[0]);
+	}
+	public int gethomeWidth() {
+		 String count[] = xmlUtil.getByNames("homeWidth");
+		 return Integer.parseInt(count[0]);
+	}
+	public int gethomeLength() {
+		 String count[] = xmlUtil.getByNames("homeLength");
+		 return Integer.parseInt(count[0]);
+	}
+	
 	public int getBulletWidth() {
 		 String count[] = xmlUtil.getByNames("bulletWidth");
 		 return Integer.parseInt(count[0]);

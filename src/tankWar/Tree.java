@@ -11,8 +11,8 @@ import java.awt.Toolkit;
  */
 
 public class Tree implements StillObject{
-	public static final int width = 30;
-	public static final int length = 30;
+	public static final int width = Info.getInstance().gettreeWidth();
+	public static final int length = Info.getInstance().gettreeLength();
 	private int x, y;
 	GameFrame tc;
 	private static Toolkit tk = Toolkit.getDefaultToolkit();

@@ -29,5 +29,17 @@
 	<FramWidth>800</FramWidth>
 	<FramLength>600</FramLength>
 	
+	<treeWidth>30</treeWidth>
+	<treeLength>30</treeLength>
+	
+	<riverWidth>50</riverWidth>
+	<riverLength>150</riverLength>
+	<!-- 大本营的位置配置 -->
+	<homeX>373</homeX>
+	<homeY>545</homeY>
+	
+	<homeWidth>43</homeWidth>
+	<homeLength>43</homeLength>
+	
 	<pauseTime>1000</pauseTime>
 </config>

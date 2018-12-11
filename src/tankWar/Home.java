@@ -13,10 +13,11 @@ import java.awt.Toolkit;
  */
 
 public class Home implements StillObject{
-	private static final int x = 373;
-	private static final int y = 545;
+	private static final int x = Info.getInstance().gethomeX();
+	private static final int y = Info.getInstance().gethomeY();
 	private static GameFrame tc;
-	public static final int width = 43, length = 43; // 全局静态变量长宽
+	public static final int width = Info.getInstance().gethomeWidth()
+			, length = Info.getInstance().gethomeLength(); // 全局静态变量长宽
 	private boolean live = true;
 	private static boolean flag = false;//判断游戏是否已经结束 防止胜利后再出现失败的情况
 	
